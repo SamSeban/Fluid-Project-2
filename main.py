@@ -168,7 +168,7 @@ if __name__ == '__main__':
     cupDiameter = 68.91 # [mm] Diameter of the cup
     cupVolume = (np.pi * (cupDiameter / 2)**2 * cupHeight) * 10**(-9);  # [m^3]
 
-    T_i = 298 # [K] Initial temperature
+    T_f = 298 # [K] Final temperature
     
     P_atm = 101325 # [Pa] => [kg/(m*s^2)]
     rho = 997 # [kg/m^3]
@@ -202,7 +202,7 @@ if __name__ == '__main__':
     # PRESSURE
     heightsMeter = heights * 0.001 # [mm] => [m]
     z = heightsMeter - heightsMeter[0]
-    pressure = P_atm-rho*g*z     # [Pa]
+    pressure = P_atm-rho*g*z # [Pa]
     pressureKpa = pressure/1000 # [kPa]
 
     plt.subplot(2, 2, 3)
@@ -215,12 +215,13 @@ if __name__ == '__main__':
     plt.legend(["Resulting Pressure"])
 
     # TEMPERATURE
-    V_water_start = (np.pi * (cupDiameter / 2)**2 * heights[0]) * 10**(-9)  # [m^3]
-    V_i = cupVolume - V_water_start
     V_water = (np.pi * (cupDiameter / 2)**2 * heights) * 10**(-9) # [m^3]
     volume = cupVolume - V_water
 
-    temperature = ((pressure*volume)/(P_atm*V_i)) * T_i # [K] All temperatures
+    V_water_end = (np.pi * (cupDiameter / 2)**2 * heights[-1]) * 10**(-9)
+    V_f = cupVolume - V_water_end
+
+    temperature = ((pressure*volume)/(pressure[-1]*V_f)) * T_f
     temperatureCelsius = temperature - 273.15 # [°C]
 
     plt.subplot(2, 2, 4)
@@ -237,7 +238,7 @@ if __name__ == '__main__':
     plt.grid(True)
     plt.xlabel('Time [s]')
     plt.ylabel('Volume [L]')
-    plt.title('Volume of air in the cup')
+    plt.title('Volume of air in the cup v. Time')
     plt.legend(["Experimental value"])
 
     plt.show()
